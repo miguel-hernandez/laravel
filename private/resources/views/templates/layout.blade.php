@@ -2,14 +2,16 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title>{{ $titulo }}</title>
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel="icon" sizes="16x16 32x32" href="{{ asset('assets/img/favicon.png') }}">
+    <title>{{ $titulo }}</title>
 
     <link rel="stylesheet" href=" {{ asset('assets/css/font-awesome.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/bootstrap/css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/master.css') }}">
-
 
   </head>
   <body>
@@ -27,7 +29,7 @@
               <ul class="list-unstyled">
                 <li><a href="#" class="text-white">Twitter</a></li>
                 <li><a href="#" class="text-white">Facebook</a></li>
-                <li><a href="" class="text-white">Linkedin</a></li>
+                <li><a href="#" class="text-white">Linkedin</a></li>
                 <li><a href="#" class="text-white">contacto@mail.com</a></li>
               </ul>
             </div>
@@ -71,7 +73,6 @@
     <footer class="text-muted">
       <div class="container">
         <p class="float-right">
-          {{-- <a href="#">Back to top</a> --}}
         </p>
         <p>&copy; Miguel Hernández</p>
         <p><a href="http://miguelhernandez.hol.es">Visita mi página </a></p>

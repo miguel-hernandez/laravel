@@ -58,6 +58,7 @@ class LoginController extends Controller
       $clave = $request->input('itxt_login_clave');
 
       $result = Seguridad::validar_login($username,$clave);
+
       // echo "<pre>"; print_r($result); die();
 
 
@@ -78,7 +79,7 @@ class LoginController extends Controller
     }// validar()
 
     public function salir(Request $request){
-      $request->session()->forget('username');
+      $request->session()->forget(DATOSUSUARIO);
       $request->session()->flush();
       return redirect('/');
     }// salir()

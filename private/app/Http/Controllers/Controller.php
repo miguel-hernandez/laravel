@@ -8,7 +8,7 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 define("ZONAHORARIA", "America/Mexico_City");
-define('DATOSUSUARIO', "datos_usuario_app");
+define('DATOSUSUARIO', "datos_usuario_laravel");
 
 class Controller extends BaseController
 {
