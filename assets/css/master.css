@@ -1,5 +1,5 @@
-/* --------------------------------------------------------------- JQuery validate */
 
+/* ----------------------- JQuery validate */
 label.error {
 	float: none;
 	color: red !important;
@@ -9,6 +9,7 @@ label.error {
 	font-weight: 500 !important;
 }
 
+/* ----------------------- footer */
 footer {
   padding-top: 3rem;
   padding-bottom: 3rem;
@@ -19,3 +20,8 @@ footer p {
 }
 
 .box-shadow { box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05); }
+
+/* ----------------------- tags */
+textarea{
+	resize: none;
+}

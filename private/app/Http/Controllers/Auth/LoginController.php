@@ -7,6 +7,8 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
 use Illuminate\Http\Request;
 use App\Seguridad;
+// use Symfony\Component\HttpFoundation\Response;
+// use App\Http\Controllers\Auth\Redirect;
 class LoginController extends Controller
 {
     /*
@@ -41,7 +43,7 @@ class LoginController extends Controller
 
     public function index(Request $request){
       if ($request->session()->has(DATOSUSUARIO)) {
-          return redirect()->action('UserController@index');
+          return redirect()->action('PanelController@index');
       }else{
         $titulo = "Login";
         $username = "Laravel";
@@ -67,12 +69,26 @@ class LoginController extends Controller
         $datos_usuario = $result[0];
         // $request->session()->push(DATOSUSUARIO, $datos_usuario);
         $request->session()->put(DATOSUSUARIO, $datos_usuario);
-        return redirect()->action('UserController@index');
+        return redirect()->action('PanelController@index');
       }
       else{
         $titulo = "Login";
         $username = "Laravel";
-        return view("auth.login", compact('titulo', 'username'));
+        $error = "¡El usuario o la contraseña son incorrectos!";
+
+        // return Redirect::route('login', array('error' => $error));
+
+        // return Redirect::to('login')->with('error', 'Login Failed');
+        // return Redirect::action('Auth\LoginController@index', array('error' => $error));
+        // return Redirect::route('login', array('error' => $error));
+        // return Redirect::action('Auth\LoginController@index', array('error' => $error));
+
+        /*
+        return redirect()->action('Auth\LoginController@index', [
+        'error' => $error
+        ]);
+        */
+        return view("auth.login", compact('titulo', 'username', 'error'));
       }
 
 

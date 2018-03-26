@@ -25,6 +25,12 @@
   <div class="col-sm-4">
     <form method="post" id="form_login" action=" {{ url('login/validar')}}">
 
+      @if (isset($error))
+        <div class="alert alert-danger" id="danger-alert">
+            <button type="button" class="close" data-dismiss="alert">x</button>
+            {{ $error }}
+        </div>
+      @endif
       <div class="div_white">
         {{ csrf_field() }}
       <div class="row">
@@ -69,5 +75,3 @@
 @section('assets_js')
   <script type="text/javascript" src="{{ asset('assets/js/login/login.js') }}" ></script>
 @endsection
-
-{{-- <script type="text/javascript" src="js/jquery.js"></script> --}}

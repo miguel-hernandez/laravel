@@ -31,7 +31,7 @@ class Seguridad extends Model
 
 
         return DB::select( DB::raw("SELECT se.username, se.estatus, se.idusuario,
-                        us.nombre, us.paterno, us.materno, us.idtipousuario, us.email,us.ntelefono
+                        us.nombre, us.apellido1, us.apellido2, us.idtipousuario, us.email,us.ntelefono
                         FROM seguridad se
                         INNER JOIN usuario us ON us.idusuario = se.idusuario
                         INNER JOIN tipousuario tu ON tu.idtipousuario = us.idtipousuario

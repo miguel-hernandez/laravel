@@ -12,7 +12,11 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('index', [
+    'titulo' => 'Página principal',
+    'username' => 'Visitante',
+    ]
+);
 });
 
 
@@ -20,9 +24,15 @@ Route::get('/', function () {
 
 Route::get('login', 'Auth\LoginController@index');
 Route::post('login/validar', 'Auth\LoginController@validar');
-Route::get('login/salir', 'Auth\LoginController@salir');
+Route::get('salir', 'Auth\LoginController@salir');
 
-Route::get('user', 'UserController@index');
-Route::get('user/create', 'UserController@create');
+// Route::get('user', 'UserController@index');
+// Route::get('user/create', 'UserController@create');
+// Route::post('usuario/update', 'UserController@update');
 
-Route::post('usuario/update', 'UserController@update');
+Route::get('panel', 'PanelController@index');
+
+Route::get('catalogos', 'CatalogoController@index');
+Route::post('catalogo/read', 'CatalogoController@read');
+Route::get('catalogos_add', 'CatalogoController@create');
+Route::post('catalogos_save', 'CatalogoController@save');
