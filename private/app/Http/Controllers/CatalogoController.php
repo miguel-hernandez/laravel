@@ -9,7 +9,6 @@ use App\Libraries\Utilerias;
 class CatalogoController extends Controller
 {
   public $modulo;
-  // public $modulo_url;
 
   public function __construct(){
     $this->modulo = "Catálogos";
@@ -20,11 +19,18 @@ class CatalogoController extends Controller
        "c2"=>array("type"=>"text", "header"=>"Descripción")
 
    );
+   $this->arr_datos = (object)array(
+     "idcatalogo"  => 0,
+     "nombre"    => "",
+     "descripcion" => ""
+   );
+
   }
 
   public function index(Request $request){
     if (!$request->session()->has(DATOSUSUARIO)) {
-      return redirect()->action('Auth\LoginController@index');
+      // return redirect()->action('Auth\LoginController@index');
+      return redirect()->route('login'); // Redirigimos a la ruta con el nombre "login"
     }else{
         $action = NULL;
         return view("catalogo.index")->with(Utilerias::get_array_panelblade($request,$this,$action));
@@ -33,11 +39,13 @@ class CatalogoController extends Controller
 
   public function read(Request $request){
     if (!$request->session()->has(DATOSUSUARIO)) {
-      return redirect()->action('Auth\LoginController@index');
+      return redirect()->route('login'); // Redirigimos a la ruta con el nombre "login"
     }else{
       // $nombre = $this->input->post('nombre');
-      $nombre = $request->input('nombre');;
+      // $nombre = $request->input('nombre');
       // $offset = $request->input('offset');
+      $nombre = $request->input('intxt_catalogo_nombre');
+      // echo $nombre; die();
       $offset = Utilerias::get_offset($_POST, VALORES_XPAGINA);
       $num_rows = Catalogo::read($nombre,-1,-1);
       // echo $arr_datos; die();
@@ -59,25 +67,57 @@ class CatalogoController extends Controller
 
   public function create(Request $request){
     if (!$request->session()->has(DATOSUSUARIO)) {
-      return redirect()->action('Auth\LoginController@index');
+      return redirect()->route('login'); // Redirigimos a la ruta con el nombre "login"
     }else{
       $action = "Nuevo";
-      return view("catalogo.ae")->with(Utilerias::get_array_panelblade($request,$this,$action));
+      return view("catalogo.ae")->with(Utilerias::get_array_panelblade($request,$this,$action))->with("datos",$this->arr_datos);
     }
   }// create()
 
   public function save(Request $request){
     if (!$request->session()->has(DATOSUSUARIO)) {
-      return redirect()->action('Auth\LoginController@index');
+      return redirect()->route('login'); // Redirigimos a la ruta con el nombre "login"
     }else{
-      $nombre = $request->input('itxt_catalogo_nombre');;
-      $descripcion = $request->input('itxt_catalogo_descripcion');
-      $result = Catalogo::create($nombre,$descripcion);
-       // return back()->with('message', 'User created successfully.');
-       // return back()->with('message', "OK!");
+      $idcatalogo = $request->input('itxt_catalogo_idcatalogo');
 
-      return redirect()->action('CatalogoController@index');
+      $request->validate(
+        ['itxt_catalogo_nombre'=> ['required','unique:catalogo,catalogo,'.$idcatalogo]],
+        ['itxt_catalogo_nombre.required'=>'El nombre del catálogo es obligatorio',
+         'itxt_catalogo_nombre.unique'=>'Ya existe un catálogo con el nombre ingresado']
+      );
+
+      $data = [
+               "catalogo"=>$request->input('itxt_catalogo_nombre'),
+               "descripcion"=>$request->input('itxt_catalogo_descripcion')
+              ];
+
+
+      if($idcatalogo==0){
+        // echo "if"; die();
+
+        $result = Catalogo::create($data);
+      }else{
+        // echo "else"; die();
+        $result = Catalogo::set_update($idcatalogo, $data);
+      }
+
+      // return redirect()->action('CatalogoController@index');
+      return redirect()->route('catalogo');
     }
-  }// create()
+  }// save()
 
-}
+  public function update(Request $request, $idcatalogo){
+    if (!$request->session()->has(DATOSUSUARIO)) {
+      return redirect()->route('login'); // Redirigimos a la ruta con el nombre "login"
+    }else{
+      // $idcatalogo = $request->input('idcatalogo');
+      $action = "Editar";
+      $arr_datos = Catalogo::get_xid($idcatalogo);
+      // echo "<pre>"; print_r($this->arr_datos);// die();
+      // echo "<pre>"; print_r($arr_datos); die();
+      // echo $idcatalogo; die();
+      return view("catalogo.ae")->with(Utilerias::get_array_panelblade($request,$this,$action))->with("datos",$arr_datos);
+    }
+  }// update()
+
+}// class CatalogoController

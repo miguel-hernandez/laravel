@@ -43,7 +43,8 @@ class LoginController extends Controller
 
     public function index(Request $request){
       if ($request->session()->has(DATOSUSUARIO)) {
-          return redirect()->action('PanelController@index');
+          // return redirect()->action('PanelController@index');
+          return redirect()->route('panel'); // Redirigimos a la ruta con el nombre "panel"
       }else{
         $titulo = "Login";
         $username = "Laravel";
@@ -69,15 +70,16 @@ class LoginController extends Controller
         $datos_usuario = $result[0];
         // $request->session()->push(DATOSUSUARIO, $datos_usuario);
         $request->session()->put(DATOSUSUARIO, $datos_usuario);
-        return redirect()->action('PanelController@index');
+        // return redirect()->action('PanelController@index');
+        return redirect()->route('panel'); // Redirigimos a la ruta con el nombre "panel"
       }
       else{
         $titulo = "Login";
         $username = "Laravel";
         $error = "¡El usuario o la contraseña son incorrectos!";
+        return view("auth.login", compact('titulo', 'username', 'error'));
 
         // return Redirect::route('login', array('error' => $error));
-
         // return Redirect::to('login')->with('error', 'Login Failed');
         // return Redirect::action('Auth\LoginController@index', array('error' => $error));
         // return Redirect::route('login', array('error' => $error));
@@ -88,7 +90,7 @@ class LoginController extends Controller
         'error' => $error
         ]);
         */
-        return view("auth.login", compact('titulo', 'username', 'error'));
+
       }
 
 

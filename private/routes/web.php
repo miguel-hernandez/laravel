@@ -22,7 +22,8 @@ Route::get('/', function () {
 
 // Route::get('/', 'Auth\LoginController@index');
 
-Route::get('login', 'Auth\LoginController@index');
+Route::get('login', 'Auth\LoginController@index')
+        ->name('login');
 Route::post('login/validar', 'Auth\LoginController@validar');
 Route::get('salir', 'Auth\LoginController@salir');
 
@@ -30,9 +31,17 @@ Route::get('salir', 'Auth\LoginController@salir');
 // Route::get('user/create', 'UserController@create');
 // Route::post('usuario/update', 'UserController@update');
 
-Route::get('panel', 'PanelController@index');
+Route::get("panel", "PanelController@index")
+        ->name("panel");
 
-Route::get('catalogos', 'CatalogoController@index');
-Route::post('catalogo/read', 'CatalogoController@read');
-Route::get('catalogos_add', 'CatalogoController@create');
-Route::post('catalogo/save', 'CatalogoController@save');
+Route::get("catalogos", "CatalogoController@index")
+        ->name("catalogo");
+Route::post("catalogo.read", "CatalogoController@read")
+        ->name("catalogo.read");
+Route::get('catalogo/create', 'CatalogoController@create')
+        ->name('catalogo.create');
+
+Route::get("catalogo/update/{idcatalogo}", 'CatalogoController@update');
+
+Route::post('catalogo/save', 'CatalogoController@save')
+        ->name('catalogo.save');

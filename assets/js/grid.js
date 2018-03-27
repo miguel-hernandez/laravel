@@ -1,17 +1,13 @@
-function Grid(iddiv,columnas,arr_datos, pagina_actual, total_rows){
+// function Grid(iddiv,columnas,arr_datos, pagina_actual, total_rows){
+function Grid(iddiv){
   _thisgrid = this;
   _thisgrid.theme = "table-primary";
   _thisgrid.str_thead = "";
-
-  _thisgrid.iddiv = iddiv;
-  _thisgrid.columns = columnas;
   _thisgrid.columns_length = 0;
-  _thisgrid.arr_datos = arr_datos;
   _thisgrid.arr_row_selected = [];
-
   _thisgrid.valores_xpagina = 10;
-  _thisgrid.pagina_actual = pagina_actual;
-  _thisgrid.total_rows = total_rows;
+  _thisgrid.iddiv = iddiv;
+  _thisgrid.obj_message = new Message();
 }
 
 Grid.prototype.load = function() {
@@ -194,4 +190,38 @@ Grid.prototype.get_paginador = function(str_tbody, callback) {
 
      str_paginador += "</ul></nav>";
      return callback(str_paginador);
- }// get_paginador()
+ };
+
+ Grid.prototype.get_gridpaginador = function(offset, url, form) {
+   var datos = $("#"+form).serializeArray();
+   datos.push({"name":"offset","value":offset});
+   $.ajax({
+     async: true,
+     url: url,
+     method: 'POST',
+     data: datos,
+     headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+             },
+     beforeSend: function( xhr ) {
+       _thisgrid.obj_message.loading("Descargando datos");
+     }
+   })
+   .done(function( data ) {
+     swal.close();
+     var result = data.result;
+     _thisgrid.columns_length = 0;
+     _thisgrid.columns = result.arr_columnas;
+     _thisgrid.arr_datos = result.arr_datos;
+     _thisgrid.arr_row_selected = [];
+
+     _thisgrid.valores_xpagina = 10;
+     _thisgrid.pagina_actual = result.pagina_actual;
+     _thisgrid.total_rows = result.total_rows;
+
+     _thisgrid.load();
+   })
+   .fail(function(e) {
+     console.error("Error in read()"); console.table(e);
+   });
+ }// get_gridpaginador()

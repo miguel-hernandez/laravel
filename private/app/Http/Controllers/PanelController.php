@@ -20,7 +20,8 @@ class PanelController extends Controller
   public function index(Request $request){
     if (!$request->session()->has(DATOSUSUARIO)) {
       // return redirect('/');
-      return redirect()->action('Auth\LoginController@index');
+      // return redirect()->action('Auth\LoginController@index');
+      return redirect()->route('login'); // Redirigimos a la ruta con el nombre "login"
     }else{
       $usuario_session = $request->session()->get(DATOSUSUARIO);
       $username = $usuario_session->username;

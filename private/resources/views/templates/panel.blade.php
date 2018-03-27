@@ -4,7 +4,9 @@
     <meta charset="utf-8">
 
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- quitamos la opción de zoom en móviles -->
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"> -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="icon" sizes="16x16 32x32" href="{{ asset('assets/img/favicon.png') }}">
     <title>{{ $modulo }}</title>
@@ -28,7 +30,7 @@
 
           <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
             <li class="nav-item">
-              <a href="{{ url('catalogos') }}" class="nav-link"> <i class="fa fa-list"></i> Catálogos </a>
+              <a href="{{ route('catalogo') }}" class="nav-link"> <i class="fa fa-list"></i> Catálogos </a>
             </li>
             <li class="nav-item">
               <a href="{{ url('productos') }}" class="nav-link"> <i class="fa fa-reorder"></i> Productos </a>
@@ -96,8 +98,8 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
     <script type="text/javascript" src="{{ asset('assets/bootstrap/js/bootstrap.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('assets/sweetalert2/sweetalert2.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('assets/js/grid.js') }}"></script>
     <script type="text/javascript" src="{{ asset('assets/js/message.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/js/grid.js') }}"></script>
 
     @yield('assets_js')
     </body>

@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 class Catalogo extends Model
 {
+    protected $id = 'idcatalogo';
 
     public static function read($nombre, $offset,$limit){
       if($offset<0 && $limit<0){
@@ -26,22 +27,25 @@ class Catalogo extends Model
       }
     }// read()
 
-    public static function create($nombre,$descripcion){
-      return DB::table('catalogo')->insert(
-          ['catalogo' => $nombre, 'descripcion' => $descripcion]
-      );
+    public static function create($data){
+      return DB::table('catalogo')->insert($data);
     }// create()
 
-    /*
-    public static function update($idcatalogo,$descripcion){
+    public static function get_xid($idcatalogo){
+      return DB::table('catalogo AS c')
+              ->select('c.idcatalogo', 'c.catalogo as nombre', 'c.descripcion')
+              ->where('estatus', '=', 1)
+              ->where('idcatalogo', '=', $idcatalogo)
+              ->first();
+    }// update()
+
+
+    public static function set_update($idcatalogo,$data){
       return DB::table('catalogo')
                 ->where('idcatalogo', $idcatalogo)
-                ->update(
-                  ['catalogo' => $nombre, 'descripcion' => $descripcion]
-                );
-      );
+                ->update($data);
     }// update()
-    */
+
 
 
 }// class Catalogo
