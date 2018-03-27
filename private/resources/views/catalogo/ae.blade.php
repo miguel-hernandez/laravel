@@ -1,7 +1,14 @@
 @extends('templates/panel')
 
 @section('content')
-  <form id="form_catalogo_cu" action="{{ url('catalogos_save')}}" method="POST">
+  {{-- @if (isset($message)) --}}
+  @if(Session::has('message'))
+    <div class="alert alert-success" id="danger-alert">
+        <button type="button" class="close" data-dismiss="alert">x</button>
+        {{ $message }}
+    </div>
+  @endif
+  <form id="form_catalogo_cu" action="{{ url('catalogo/save')}}" method="POST">
       {{ csrf_field() }}
 
       <div class="row">
@@ -16,13 +23,13 @@
         </div>
       </div><!-- row -->
 
-      <div class="row">
+      <div class="row pt-2">
         <div class="col-sm-8"></div>
         <div class="col-sm-2">
-          <a class="btn btn-sm btn-outline-secondary btn-block" href="{{ url('catalogos') }}">Regresar</a>
+          <a class="btn btn-outline-secondary btn-block" href="{{ url('catalogos') }}">Regresar</a>
         </div>
         <div class="col-sm-2">
-          <button id="btn_catalogo_terminar" type="button" class="btn btn-sm btn-outline-success btn-block">Guardar</button>
+          <button id="btn_catalogo_terminar" type="button" class="btn btn-outline-success btn-block">Guardar</button>
         </div>
       </div>
   </form>

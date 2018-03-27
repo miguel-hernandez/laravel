@@ -1,23 +1,27 @@
 $(function() {
-  // obj_message = new Message();
+  obj_message = new Message();
   obj_catalogo = new Catalogo();
   // obj_master = new View();
 
-  obj_catalogo.read();
+  obj_catalogo.read(0);
 });
+
+function get_gridpaginador(offset){
+  obj_catalogo.read(offset);
+}
 
 $("#btn_catalogo_update").click(function(e){
     e.preventDefault();
     var arr_row = obj_grid.get_row_selected();
-    var columnas = obj_grid.columns;
-
-    if(arr_row.length==0){
-        obj_message.notification("","Seleccione un registro","error");
+    if(arr_row.length==0 || arr_row[0]['idcatalogo'] == undefined){
+        obj_message.notification("","Seleccione un catálogo","error");
     }else{
-        // console.info(arr_row[0]); // el row con los datos está en la posición 0
+        console.info(arr_row[0]); // el row con los datos está en la posición 0
+        /*
         $("#modal_catalogo_title").empty();
         $("#modal_catalogo_title").append("Editar catálogo");
         obj_catalogo.update(arr_row[0]['id']);
+        */
     }
 });
 
@@ -30,7 +34,7 @@ $("#btn_catalogo_create").click(function(e){
 
 $("#btn_catalogo_read").click(function(e){
     e.preventDefault();
-    obj_catalogo.read();
+    obj_catalogo.read(0);
 });
 
 
@@ -74,32 +78,33 @@ function Catalogo(){
     that_catalogo.idmodal = "modal_catalogo";
     that_catalogo.controlador = "Catalogo";
 
-    this.read = function(){
+    this.read = function(offset){
         var nombre = $("#intxt_catalogo_nombre").val();
-
-          // var ruta = base_url+that_catalogo.controlador+"/read";
           $.ajax({
             async: true,
-            // url: ruta,
             url:   'catalogo/read',
             method: 'POST',
-            data: {"nombre":nombre},
+            data: {"nombre":nombre, "offset":offset},
             headers: {
                           'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
             beforeSend: function( xhr ) {
-              // obj_message.loading("Descargando datos");
+              obj_message.loading("Descargando datos");
             }
           })
           .done(function( data ) {
-            // swal.close();
+            swal.close();
             var result = data.result;
-            var arr_datos = result.result;
-            var arr_columnas = result.columnas;
+            // var arr_datos = result.result;
+            // var arr_columnas = result.columnas;
+            // var pagina_actual = result.pagina_actual;
+            // var total_rows = result.num_rows;
             obj_grid = new Grid(
                 "grid_catalogos", // el id del div HTML
-                arr_columnas, // El array de columnas, serán los encabezados
-                arr_datos // E array de los datos para llenar el grid, los índices deben corresponder a los nombres de las columnas
+                result.arr_columnas, // El array de columnas, serán los encabezados
+                result.arr_datos, // E array de los datos para llenar el grid, los índices deben corresponder a los nombres de las columnas
+                result.pagina_actual,
+                result.num_rows
             );
             obj_grid.load();
           })

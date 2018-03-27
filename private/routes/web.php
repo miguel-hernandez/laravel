@@ -35,4 +35,4 @@ Route::get('panel', 'PanelController@index');
 Route::get('catalogos', 'CatalogoController@index');
 Route::post('catalogo/read', 'CatalogoController@read');
 Route::get('catalogos_add', 'CatalogoController@create');
-Route::post('catalogos_save', 'CatalogoController@save');
+Route::post('catalogo/save', 'CatalogoController@save');

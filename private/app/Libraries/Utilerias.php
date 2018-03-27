@@ -75,6 +75,16 @@ class Utilerias{
 			 return strtoupper($nombre);
 		}
 
+		public static function get_offset($post, $valores_xpagina){
+          $offset = !isset($post["offset"]) || $post["offset"] == "undefined" ? 0 : $post["offset"];
+      		if($offset == 0){
+		             $_SESSION[PAGINA_ACTUAL_GRID] = 1;
+		      }else{
+		             $_SESSION[PAGINA_ACTUAL_GRID] = ($offset+$valores_xpagina)/$valores_xpagina;
+		      }
+		      return $offset;
+		 }// get_offset()
+
 }// class Utilerias
 
 

@@ -11,6 +11,7 @@
 
     <link rel="stylesheet" href=" {{ asset('assets/css/font-awesome.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/bootstrap/css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/sweetalert2/sweetalert2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/css/master.css') }}">
 
   </head>
@@ -94,7 +95,9 @@
     <script type="text/javascript" src="{{ asset('assets/jquery/jquery.validate.js') }}" ></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
     <script type="text/javascript" src="{{ asset('assets/bootstrap/js/bootstrap.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/sweetalert2/sweetalert2.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('assets/js/grid.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/js/message.js') }}"></script>
 
     @yield('assets_js')
     </body>
