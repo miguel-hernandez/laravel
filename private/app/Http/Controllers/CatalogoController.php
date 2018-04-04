@@ -107,11 +107,12 @@ class CatalogoController extends Controller
     }
   }// save()
 
-  public function update(Request $request, $idcatalogo){
+  public function update(Request $request){
     if (!$request->session()->has(DATOSUSUARIO)) {
       return redirect()->route('login'); // Redirigimos a la ruta con el nombre "login"
     }else{
       // $idcatalogo = $request->input('idcatalogo');
+      echo "<pre>"; print_r($_REQUEST); die();
       $action = "Editar";
       $arr_datos = Catalogo::get_xid($idcatalogo);
       // echo "<pre>"; print_r($this->arr_datos);// die();

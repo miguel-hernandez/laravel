@@ -19,13 +19,6 @@ $("#btn_catalogo_update").click(function(e){
     }
 });
 
-$("#btn_catalogo_create").click(function(e){
-    e.preventDefault();
-    $("#modal_catalogo_title").empty();
-    $("#modal_catalogo_title").append("Catálogo nuevo");
-    obj_catalogo.create();
-});
-
 $("#btn_catalogo_read").click(function(e){
     e.preventDefault();
     obj_catalogo.read(0);
@@ -78,28 +71,30 @@ function Catalogo(){
     };
 
     Catalogo.prototype.update = function(idcatalogo) {
+        var arr = [];
+        arr['idcatalogo'] =  idcatalogo;
+
         var form = document.createElement("form");
-        // var element1 = document.createElement("input");
-
-        // var element2 = document.createElement("input");
-
         form.name = "form_catalogo_update";
         form.id = "form_catalogo_update";
         form.method = "GET";
         form.target = "_self";
+        form.action = "catalogo/update/";
 
-        form.action = "catalogo/update/"+idcatalogo;
+        var element1 = document.createElement("input");
+        element1.type="hidden";
+        element1.value=idcatalogo;
+        element1.name="idcatalogo";
 
+        // var element2 = document.createElement("input");
+        // element2.type="hidden";
+        // element2.name="csrf-token";
+        // element2.value="<?php {{ csrf_field() }} ?>"
 
-        // "<?php echo route('catalogo.update', ['idcatalogo' => 1]); ?>"
-        // {{ route('catalogo.update', ['idcatalogo' => 1]) }}
-
-        // element1.type="hidden";
-        // element1.value=idcatalogo;
-        // element1.name="idcatalogo";
-        // form.appendChild(element1);
-
-        // 'X-CSRF-TOKEN':
+        form.appendChild(element1);
+        // form.appendChild(element2);
         document.body.appendChild(form);
+
         form.submit();
+
     };

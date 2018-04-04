@@ -253,7 +253,6 @@ Grid.prototype.get_paginador = function(str_tbody, callback) {
      _thisgrid.total_rows = result.num_rows;
      _thisgrid.pagina_actual = result.pagina_actual;
 
-
      _thisgrid.load();
    })
    .fail(function(e) {
