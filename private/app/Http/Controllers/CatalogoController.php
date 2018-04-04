@@ -57,7 +57,8 @@ class CatalogoController extends Controller
         "num_rows" => $num_rows,
         "arr_datos" => $result,
         "arr_columnas" => $this->arr_columnas_grid,
-        "pagina_actual" => $_SESSION[PAGINA_ACTUAL_GRID]
+        "pagina_actual" => $_SESSION[PAGINA_ACTUAL_GRID],
+        "total_pags" => floor($num_rows/10)
       );
       return response()->json(["result" => $response]);
     }
@@ -79,7 +80,7 @@ class CatalogoController extends Controller
       return redirect()->route('login'); // Redirigimos a la ruta con el nombre "login"
     }else{
       $idcatalogo = $request->input('itxt_catalogo_idcatalogo');
-
+      // $idcatalogo_ = "idcatalogo";
       $request->validate(
         ['itxt_catalogo_nombre'=> ['required','unique:catalogo,catalogo,'.$idcatalogo]],
         ['itxt_catalogo_nombre.required'=>'El nombre del catálogo es obligatorio',

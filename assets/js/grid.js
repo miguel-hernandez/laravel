@@ -133,6 +133,7 @@ Grid.prototype.init = function() {
 //creamos los enlaces de nuestra paginaciÃ³n
 Grid.prototype.get_paginador = function(str_tbody, callback) {
     var total_datos = _thisgrid.total_rows;
+    console.info("total_datos: "+total_datos);
     var funcion = "get_gridpaginador" ;
     var str_paginador = str_tbody;
 
@@ -141,9 +142,12 @@ Grid.prototype.get_paginador = function(str_tbody, callback) {
 
      //limite por pÃ¡gina
      var limit = _thisgrid.valores_xpagina;
+     // limit = 8;
+     console.info("limit: "+limit);
      //total de enlaces que existen
-     var totalPag = Math.floor(total_datos/limit);
-     // console.info(totalPag);
+     // var totalPag = Math.floor(total_datos/limit);
+     var totalPag = Math.floor(parseInt(total_datos)/parseInt(limit));
+     console.info(totalPag);
 
      //links delante y detrás que queremos mostrar
      var pagVisibles = 2;
@@ -153,13 +157,14 @@ Grid.prototype.get_paginador = function(str_tbody, callback) {
      }else{
          var primera_pag = actual_pag - pagVisibles;
      }
-
+     console.info("actual_pag: "+actual_pag);
      if(actual_pag + pagVisibles <= totalPag){
          var ultima_pag = actual_pag + pagVisibles;
      }else{
          var ultima_pag = totalPag;
      }
 
+     console.info("ultima_pag: "+ultima_pag);
      str_paginador += "<nav><ul class='pagination pagination-sm justify-content-center' style='margin-top:3px !important; '>";
      str_paginador += (actual_pag > 1) ?
                                         "<li class='page-item'><a class='page-link' href='javascript:void(0)' onclick="+funcion+"(0)>Primera</li></a>"
@@ -170,7 +175,7 @@ Grid.prototype.get_paginador = function(str_tbody, callback) {
                                         :
                                         "<li class='page-item disabled'><a class='page-link' href='javascript:void(0)'><span aria-hidden='true'>&laquo;</span></li></a>";
 
-     for(var i=primera_pag; i<ultima_pag+1; i++){
+     for(var i=primera_pag; i<ultima_pag+2; i++){
          var z = i;
          str_paginador += (i == actual_pag) ?
                                         "<li class='page-item disabled'><a class='page-link' href='javascript:void(0)'>"+i+"</li></a>"
@@ -184,11 +189,42 @@ Grid.prototype.get_paginador = function(str_tbody, callback) {
                                           "<li class='page-item disabled'><a class='page-link' href='javascript:void(0)'><span aria-hidden='true'>&raquo;</span></li></a>";
 
      str_paginador += (actual_pag < totalPag) ?
-                                        "<li class='page-item'><a class='page-link' href='javascript:void(0)' onclick="+funcion+"("+((totalPag*limit))+")>Última</li></a>"
+                                        "<li class='page-item'><a class='page-link' href='javascript:void(0)' onclick="+funcion+"("+((totalPag)*limit)+")>Última</li></a>"
                                         :
                                         "<li class='page-item disabled'><a class='page-link' href='javascript:void(0)'>Última</li></a>";
 
      str_paginador += "</ul></nav>";
+     /*
+     $str_paginador .= "<nav><ul class='pager' style='margin-top:3px !important; '>";
+     $str_paginador .= ($actual_pag > 1) ?
+                                        "<li class='page-item'> <a href='javascript:void(0)'  onclick={$function}(0,".$limit.")>Primera</li></a>"
+                                        :
+                                        "<li class='page-item disabled'>   <a href='javascript:void(0)'>Primera</li></a>";
+     $str_paginador .= ($actual_pag > 1) ?
+                                        "<li class='page-item'>   <a href='javascript:void(0)' onclick={$function}(".(($actual_pag-2)*$limit).")><span aria-hidden='true'>&laquo;</span> </li></a>"
+                                        :
+                                        "<li class='page-item disabled'><a href='javascript:void(0)'><span aria-hidden='true'>&laquo;</span></li></a>";
+
+     for($i=$primera_pag; $i<=$ultima_pag+1; $i++){
+         $z = $i;
+         $str_paginador .= ($i == $actual_pag) ?
+                                        "<li class='page-item disabled'>  <a  href='javascript:void(0)'>".$i."</li></a>"
+                                        :
+                                        "<li class='page-item'><a href='javascript:void(0)' onclick={$function}(".(($z-1)*$limit).")>".$i."</li></a>";
+     }
+
+     $str_paginador .= ($actual_pag < $totalPag) ?
+                                        "<li class='page-item'><a href='javascript:void(0)' onclick={$function}(".(($actual_pag)*$limit).")> <span aria-hidden='true'>&raquo;</span></li></a>"
+                                          :
+                                          "<li class='page-item disabled'><a href='javascript:void(0)'><span aria-hidden='true'>&raquo;</span></li></a>";
+
+     $str_paginador .= ($actual_pag < $totalPag) ?
+                                        "<li class='page-item'><a href='javascript:void(0)' onclick={$function}(".(($totalPag)*$limit).")>Ãšltima</li></a>"
+                                        :
+                                        "<li class='page-item disabled'>  <a href='javascript:void(0)'>Ãšltima</li></a>";
+
+     $str_paginador .= "</ul></nav>";
+     */
      return callback(str_paginador);
  };
 
@@ -210,14 +246,13 @@ Grid.prototype.get_paginador = function(str_tbody, callback) {
    .done(function( data ) {
      swal.close();
      var result = data.result;
-     _thisgrid.columns_length = 0;
      _thisgrid.columns = result.arr_columnas;
      _thisgrid.arr_datos = result.arr_datos;
      _thisgrid.arr_row_selected = [];
 
-     _thisgrid.valores_xpagina = 10;
+     _thisgrid.total_rows = result.num_rows;
      _thisgrid.pagina_actual = result.pagina_actual;
-     _thisgrid.total_rows = result.total_rows;
+
 
      _thisgrid.load();
    })

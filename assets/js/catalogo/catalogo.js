@@ -80,6 +80,7 @@ function Catalogo(){
     Catalogo.prototype.update = function(idcatalogo) {
         var form = document.createElement("form");
         // var element1 = document.createElement("input");
+
         // var element2 = document.createElement("input");
 
         form.name = "form_catalogo_update";
@@ -88,12 +89,16 @@ function Catalogo(){
         form.target = "_self";
 
         form.action = "catalogo/update/"+idcatalogo;
-        /*
-        element1.type="hidden";
-        element1.value=idcatalogo;
-        element1.name="idcatalogo";
-        form.appendChild(element1);
-        */
+
+
+        // "<?php echo route('catalogo.update', ['idcatalogo' => 1]); ?>"
+        // {{ route('catalogo.update', ['idcatalogo' => 1]) }}
+
+        // element1.type="hidden";
+        // element1.value=idcatalogo;
+        // element1.name="idcatalogo";
+        // form.appendChild(element1);
+
         // 'X-CSRF-TOKEN':
         document.body.appendChild(form);
         form.submit();

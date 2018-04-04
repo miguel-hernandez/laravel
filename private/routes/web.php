@@ -34,6 +34,7 @@ Route::get('salir', 'Auth\LoginController@salir');
 Route::get("panel", "PanelController@index")
         ->name("panel");
 
+
 Route::get("catalogos", "CatalogoController@index")
         ->name("catalogo");
 Route::post("catalogo.read", "CatalogoController@read")
@@ -41,7 +42,9 @@ Route::post("catalogo.read", "CatalogoController@read")
 Route::get('catalogo/create', 'CatalogoController@create')
         ->name('catalogo.create');
 
-Route::get("catalogo/update/{idcatalogo}", 'CatalogoController@update');
+Route::get('catalogo/update/{idcatalogo}', 'CatalogoController@update')
+      ->where(['idcatalogo' => '[0-9]+'])
+      ->name("catalogo.update");
 
 Route::post('catalogo/save', 'CatalogoController@save')
         ->name('catalogo.save');

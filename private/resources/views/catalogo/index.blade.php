@@ -27,6 +27,8 @@
         <button id="btn_catalogo_update" type="button" class="btn btn-block btn-outline-primary">
           <i class="fa fa-edit"></i> Editar
         </button>
+        {{-- <a class="btn btn-outline-secondary btn-block" href="{{ route('catalogo.update', ['idcatalogo' => 1]) }}">Editar</a> --}}
+
       </div>
       <div class="col-4 col-sm-4 col-md-2 col-lg-2">
         <button id="button" type="button"  class="btn btn-block btn-outline-danger">
