@@ -28,13 +28,12 @@ $("#btn_catalogo_read").click(function(e){
 $("#btn_catalogo_delete").click(function(e){
     e.preventDefault();
     var arr_row = that_catalogo.obj_grid.get_row_selected();
-    if(arr_row.length==0){
+    if(arr_row.length==0 || arr_row[0]['idcatalogo'] == undefined){
         obj_message.notification("","Seleccione un registro","error");
     }else{
         swal({
              title : "",
-             html : "Si elimina este catálogo también serán eliminados los productos y servicios que  pertenecen "+
-                          "a  "+arr_row[0]['catalogo']+" ¿Eliminar?",
+             html : "¿Eliminar "+arr_row[0]['catalogo']+"?",
              type : "question",
              confirmButtonText: "Confirmar",
              cancelButtonText: "Cancelar",
@@ -44,7 +43,7 @@ $("#btn_catalogo_delete").click(function(e){
              allowOutsideClick:false,
              allowEscapeKey:false
         }).then(function () {
-            obj_catalogo.delete(arr_row[0]['id']);
+            obj_catalogo.delete(arr_row[0]['idcatalogo']);
         }, function (dismiss) {
            // alert("Cancelar");
         });
@@ -71,30 +70,26 @@ function Catalogo(){
     };
 
     Catalogo.prototype.update = function(idcatalogo) {
-        var arr = [];
-        arr['idcatalogo'] =  idcatalogo;
-
         var form = document.createElement("form");
         form.name = "form_catalogo_update";
         form.id = "form_catalogo_update";
-        form.method = "GET";
+        form.method = "POST";
         form.target = "_self";
-        form.action = "catalogo/update/";
+        form.action = "catalogo/update";
 
         var element1 = document.createElement("input");
         element1.type="hidden";
         element1.value=idcatalogo;
         element1.name="idcatalogo";
 
-        // var element2 = document.createElement("input");
-        // element2.type="hidden";
-        // element2.name="csrf-token";
-        // element2.value="<?php {{ csrf_field() }} ?>"
+        var element2 = document.createElement("input");
+        element2.type="hidden";
+        element2.name="_token";
+        element2.value=  $('meta[name="csrf-token"]').attr('content');
 
         form.appendChild(element1);
-        // form.appendChild(element2);
+        form.appendChild(element2);
         document.body.appendChild(form);
 
         form.submit();
-
     };

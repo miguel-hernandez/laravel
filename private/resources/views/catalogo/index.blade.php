@@ -31,7 +31,7 @@
 
       </div>
       <div class="col-4 col-sm-4 col-md-2 col-lg-2">
-        <button id="button" type="button"  class="btn btn-block btn-outline-danger">
+        <button id="btn_catalogo_delete" type="button"  class="btn btn-block btn-outline-danger">
           <i class="fa fa-trash"></i> Eliminar
         </button>
       </div>

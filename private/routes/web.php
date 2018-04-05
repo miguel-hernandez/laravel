@@ -42,14 +42,20 @@ Route::post("catalogo.read", "CatalogoController@read")
 Route::get('catalogo/create', 'CatalogoController@create')
         ->name('catalogo.create');
 
+
+// Route::get('catalogo/update/{idcatalogo}', 'CatalogoController@update')
+//       ->where(['idcatalogo' => '[0-9]+'])
+//       ->name("catalogo.update");
 /*
-Route::get('catalogo/update/{idcatalogo}', 'CatalogoController@update')
-      ->where(['idcatalogo' => '[0-9]+'])
+Route::post('catalogo/update', 'CatalogoController@update')
       ->name("catalogo.update");
-      */
-      Route::get('catalogo/update/{idcatalogo}', function ($idcatalogo) {
-          return "idcatalogo: ".$idcatalogo;
-      })->name("catalogo.update");
+*/
+Route::match(['get', 'post'],'/catalogo/update', 'CatalogoController@update')
+->name("catalogo.update");
+
+      // Route::get('catalogo/update/{idcatalogo}', function ($idcatalogo) {
+      //     return "idcatalogo: ".$idcatalogo;
+      // })->name("catalogo.update");
 
 Route::post('catalogo/save', 'CatalogoController@save')
         ->name('catalogo.save');

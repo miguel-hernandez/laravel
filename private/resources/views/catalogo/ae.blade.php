@@ -14,17 +14,18 @@
   <form id="form_catalogo_cu" method="POST" action="{{ route('catalogo.save')}}">
       {{ csrf_field() }}
       <div class="row">
-        <input id="itxt_catalogo_idcatalogo" name="itxt_catalogo_idcatalogo" type="hidden" value="{{ $datos->idcatalogo }}">
+        <input id="itxt_catalogo_idcatalogo" name="itxt_catalogo_idcatalogo" type="hidden" value="{{ old('itxt_catalogo_idcatalogo',$datos['idcatalogo']) }}">
+
         <div class="col-sm-12">
           <label for="itxt_catalogo_nombre">Catálogo</label>
-          <input id="itxt_catalogo_nombre" name="itxt_catalogo_nombre" type="text"  class="form-control" value="{{ old('itxt_catalogo_nombre', $datos->nombre) }}">
+          <input id="itxt_catalogo_nombre" name="itxt_catalogo_nombre" type="text"  class="form-control" value="{{ old('itxt_catalogo_nombre', $datos['nombre']) }}">
           @if ($errors->has('itxt_catalogo_nombre'))
             <label class="error">{{ $errors->first('itxt_catalogo_nombre') }}</label>
           @endif
         </div>
         <div class="col-sm-12">
           <label for="itxt_catalogo_descripcion">Descripción</label>
-          <textarea id="itxt_catalogo_descripcion" name="itxt_catalogo_descripcion" class="form-control" rows="5">{{ old('itxt_catalogo_descripcion', $datos->descripcion) }}</textarea>
+          <textarea id="itxt_catalogo_descripcion" name="itxt_catalogo_descripcion" class="form-control" rows="5">{{ old('itxt_catalogo_descripcion', $datos['descripcion']) }}</textarea>
         </div>
       </div><!-- row -->
 

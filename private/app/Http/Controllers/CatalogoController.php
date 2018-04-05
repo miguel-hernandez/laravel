@@ -19,12 +19,16 @@ class CatalogoController extends Controller
        "c2"=>array("type"=>"text", "header"=>"Descripción")
 
    );
-   $this->arr_datos = (object)array(
+   // $this->arr_datos = (object)array(
+   //   "idcatalogo"  => 0,
+   //   "nombre"    => "",
+   //   "descripcion" => ""
+   // );
+   $this->arr_datos = array(
      "idcatalogo"  => 0,
      "nombre"    => "",
      "descripcion" => ""
    );
-
   }
 
   public function index(Request $request){
@@ -64,8 +68,6 @@ class CatalogoController extends Controller
     }
   }// read()
 
-
-
   public function create(Request $request){
     if (!$request->session()->has(DATOSUSUARIO)) {
       return redirect()->route('login'); // Redirigimos a la ruta con el nombre "login"
@@ -75,19 +77,47 @@ class CatalogoController extends Controller
     }
   }// create()
 
+  public function update(Request $request){
+    if (!$request->session()->has(DATOSUSUARIO)) {
+      return redirect()->route('login'); // Redirigimos a la ruta con el nombre "login"
+    }else{
+      $idcatalogo = $request->input('idcatalogo');
+      if(!$idcatalogo){
+        session_start();
+        $idcatalogo = $_SESSION["id_aux"];
+      }
+      // echo "idcatalogo: ".$idcatalogo; die();
+      $action = "Editar";
+      $arr_datos = Catalogo::get_xid($idcatalogo);
+      $arr_datos =  (array) $arr_datos;
+      // echo "<pre>"; print_r($arr_datos['idcatalogo']); die();
+      return view("catalogo.ae")->with(Utilerias::get_array_panelblade($request,$this,$action))->with("datos",$arr_datos);
+    }
+  }// update()
+
   public function save(Request $request){
     if (!$request->session()->has(DATOSUSUARIO)) {
       return redirect()->route('login'); // Redirigimos a la ruta con el nombre "login"
     }else{
       $idcatalogo = $request->input('itxt_catalogo_idcatalogo');
-      // $idcatalogo_ = "idcatalogo";
+      session_start();
+      $_SESSION["id_aux"] = $idcatalogo;
+      // echo "<pre>"; print_r($_SESSION); die();
+      // echo $idcatalogo; die();
       $request->validate(
-        ['itxt_catalogo_nombre'=> ['required','unique:catalogo,catalogo,'.$idcatalogo]],
-        ['itxt_catalogo_nombre.required'=>'El nombre del catálogo es obligatorio',
-         'itxt_catalogo_nombre.unique'=>'Ya existe un catálogo con el nombre ingresado']
+        [
+          'itxt_catalogo_idcatalogo'=> ['required'],
+          'itxt_catalogo_nombre'=> ['required','unique:catalogo,catalogo,'.$idcatalogo]
+        ],
+        [
+          'itxt_catalogo_idcatalogo.required'=>'',
+          'itxt_catalogo_nombre.required'=>'El nombre del catálogo es obligatorio',
+         'itxt_catalogo_nombre.unique'=>'Ya existe un catálogo con el nombre ingresado'
+       ]
       );
 
       $data = [
+               "id"=>$request->input('itxt_catalogo_idcatalogo'),
                "catalogo"=>$request->input('itxt_catalogo_nombre'),
                "descripcion"=>$request->input('itxt_catalogo_descripcion')
               ];
@@ -107,19 +137,6 @@ class CatalogoController extends Controller
     }
   }// save()
 
-  public function update(Request $request){
-    if (!$request->session()->has(DATOSUSUARIO)) {
-      return redirect()->route('login'); // Redirigimos a la ruta con el nombre "login"
-    }else{
-      // $idcatalogo = $request->input('idcatalogo');
-      echo "<pre>"; print_r($_REQUEST); die();
-      $action = "Editar";
-      $arr_datos = Catalogo::get_xid($idcatalogo);
-      // echo "<pre>"; print_r($this->arr_datos);// die();
-      // echo "<pre>"; print_r($arr_datos); die();
-      // echo $idcatalogo; die();
-      return view("catalogo.ae")->with(Utilerias::get_array_panelblade($request,$this,$action))->with("datos",$arr_datos);
-    }
-  }// update()
+
 
 }// class CatalogoController
