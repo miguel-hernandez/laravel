@@ -11,7 +11,7 @@
     </div>
     @endif
 
-  <form id="form_catalogo_cu" method="POST" action="{{ route('catalogo.save')}}">
+  <form id="form_catalogo_creup" method="POST" action="{{ route('catalogo.save')}}">
       {{ csrf_field() }}
       <div class="row">
         <input id="itxt_catalogo_idcatalogo" name="itxt_catalogo_idcatalogo" type="hidden" value="{{ old('itxt_catalogo_idcatalogo',$datos['idcatalogo']) }}">
@@ -42,5 +42,5 @@
 @endsection
 
 @section('assets_js')
-  <!-- <script type="text/javascript" src="{{ asset('assets/js/catalogo/validacion.js') }}" ></script> -->
+  <script type="text/javascript" src="{{ asset('assets/js/catalogo/validacion.js') }}" ></script>
 @endsection

@@ -32,7 +32,7 @@
               <a href="{{ route('catalogo') }}" class="nav-link"> <i class="fa fa-list"></i> Catálogos </a>
             </li>
             <li class="nav-item">
-              <a href="{{ url('productos') }}" class="nav-link"> <i class="fa fa-reorder"></i> Productos </a>
+              <a href="{{ url('producto') }}" class="nav-link"> <i class="fa fa-reorder"></i> Productos </a>
             </li>
             <li class="nav-item">
               <a href="{{ url('usuarios') }}" class="nav-link"> <i class="fa fa-user-o"></i> Usuarios </a>
@@ -95,10 +95,12 @@
     <script type="text/javascript" src="{{ asset('assets/jquery/jquery-3.2.1.min.js') }}" ></script>
     <script type="text/javascript" src="{{ asset('assets/jquery/jquery.validate.js') }}" ></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
     <script type="text/javascript" src="{{ asset('assets/bootstrap/js/bootstrap.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('assets/sweetalert2/sweetalert2.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('assets/js/message.js') }}"></script>
     <script type="text/javascript" src="{{ asset('assets/js/grid.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('assets/js/design.js') }}"></script>
 
     @yield('assets_js')
     </body>

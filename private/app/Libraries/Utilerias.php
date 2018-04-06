@@ -85,6 +85,16 @@ class Utilerias{
 		      return $offset;
 		 }// get_offset()
 
+		 public static function set_flash_message($tipo, $mensaje){
+         	$str_html = " <div id='flash_message' class='alert alert-{$tipo} alert-dismissible fade show' role='alert'>
+													<strong> {$mensaje} </strong>
+													<button type='button' class='close' data-dismiss='alert'>&times;</button>
+									 			</div>
+                      ";
+
+					\Session::flash(FLASH_MESSAGE, $str_html); //<--FLASH MESSAGE
+       }// get_flash_message()
+
 }// class Utilerias
 
 

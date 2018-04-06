@@ -27,9 +27,7 @@ Route::get('login', 'Auth\LoginController@index')
 Route::post('login/validar', 'Auth\LoginController@validar');
 Route::get('salir', 'Auth\LoginController@salir');
 
-// Route::get('user', 'UserController@index');
-// Route::get('user/create', 'UserController@create');
-// Route::post('usuario/update', 'UserController@update');
+
 
 Route::get("panel", "PanelController@index")
         ->name("panel");
@@ -43,19 +41,34 @@ Route::get('catalogo/create', 'CatalogoController@create')
         ->name('catalogo.create');
 
 
-// Route::get('catalogo/update/{idcatalogo}', 'CatalogoController@update')
-//       ->where(['idcatalogo' => '[0-9]+'])
-//       ->name("catalogo.update");
 /*
-Route::post('catalogo/update', 'CatalogoController@update')
-      ->name("catalogo.update");
-*/
 Route::match(['get', 'post'],'/catalogo/update', 'CatalogoController@update')
 ->name("catalogo.update");
+*/
 
-      // Route::get('catalogo/update/{idcatalogo}', function ($idcatalogo) {
-      //     return "idcatalogo: ".$idcatalogo;
-      // })->name("catalogo.update");
+Route::get('catalogo/update/{idcatalogo}', 'CatalogoController@update')
+      ->where(['idcatalogo' => '[0-9]+'])
+      ->name("catalogo.update");
 
 Route::post('catalogo/save', 'CatalogoController@save')
         ->name('catalogo.save');
+
+Route::get('catalogo/delete/{idcatalogo}', 'CatalogoController@delete')
+      ->where(['idcatalogo' => '[0-9]+'])
+      ->name("catalogo.update");
+
+Route::resource('producto', 'ProductoController');
+
+        // Route::get('user', 'UserController@index');
+        // Route::get('user/create', 'UserController@create');
+        // Route::post('usuario/update', 'UserController@update');
+
+        // Route::get('catalogo/update/{idcatalogo}', function ($idcatalogo) {
+        //     return "idcatalogo: ".$idcatalogo;
+        // })->name("catalogo.update");
+
+
+        /*
+        Route::post('catalogo/update', 'CatalogoController@update')
+              ->name("catalogo.update");
+        */

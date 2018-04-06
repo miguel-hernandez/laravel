@@ -37,6 +37,7 @@ class CatalogoController extends Controller
       return redirect()->route('login'); // Redirigimos a la ruta con el nombre "login"
     }else{
         $action = NULL;
+        session()->has('data');
         return view("catalogo.index")->with(Utilerias::get_array_panelblade($request,$this,$action));
     }
   }// index()
@@ -73,25 +74,24 @@ class CatalogoController extends Controller
       return redirect()->route('login'); // Redirigimos a la ruta con el nombre "login"
     }else{
       $action = "Nuevo";
-      return view("catalogo.ae")->with(Utilerias::get_array_panelblade($request,$this,$action))->with("datos",$this->arr_datos);
+      return view("catalogo.creup")->with(Utilerias::get_array_panelblade($request,$this,$action))->with("datos",$this->arr_datos);
     }
   }// create()
 
-  public function update(Request $request){
+  public function update(Request $request,$idcatalogo){
     if (!$request->session()->has(DATOSUSUARIO)) {
       return redirect()->route('login'); // Redirigimos a la ruta con el nombre "login"
     }else{
-      $idcatalogo = $request->input('idcatalogo');
-      if(!$idcatalogo){
-        session_start();
-        $idcatalogo = $_SESSION["id_aux"];
-      }
-      // echo "idcatalogo: ".$idcatalogo; die();
+      // $idcatalogo = $request->input('idcatalogo');
+      // if(!$idcatalogo){
+      //   session_start();
+      //   $idcatalogo = $_SESSION["id_aux"];
+      // }
       $action = "Editar";
       $arr_datos = Catalogo::get_xid($idcatalogo);
       $arr_datos =  (array) $arr_datos;
       // echo "<pre>"; print_r($arr_datos['idcatalogo']); die();
-      return view("catalogo.ae")->with(Utilerias::get_array_panelblade($request,$this,$action))->with("datos",$arr_datos);
+      return view("catalogo.creup")->with(Utilerias::get_array_panelblade($request,$this,$action))->with("datos",$arr_datos);
     }
   }// update()
 
@@ -100,43 +100,65 @@ class CatalogoController extends Controller
       return redirect()->route('login'); // Redirigimos a la ruta con el nombre "login"
     }else{
       $idcatalogo = $request->input('itxt_catalogo_idcatalogo');
-      session_start();
-      $_SESSION["id_aux"] = $idcatalogo;
+      // session_start();
+      // $_SESSION["id_aux"] = $idcatalogo;
       // echo "<pre>"; print_r($_SESSION); die();
       // echo $idcatalogo; die();
       $request->validate(
         [
-          'itxt_catalogo_idcatalogo'=> ['required'],
           'itxt_catalogo_nombre'=> ['required','unique:catalogo,catalogo,'.$idcatalogo]
         ],
         [
-          'itxt_catalogo_idcatalogo.required'=>'',
           'itxt_catalogo_nombre.required'=>'El nombre del catálogo es obligatorio',
          'itxt_catalogo_nombre.unique'=>'Ya existe un catálogo con el nombre ingresado'
        ]
       );
 
       $data = [
-               "id"=>$request->input('itxt_catalogo_idcatalogo'),
                "catalogo"=>$request->input('itxt_catalogo_nombre'),
                "descripcion"=>$request->input('itxt_catalogo_descripcion')
               ];
 
 
       if($idcatalogo==0){
-        // echo "if"; die();
-
+        $action = "creado";
         $result = Catalogo::create($data);
       }else{
-        // echo "else"; die();
-        $result = Catalogo::set_update($idcatalogo, $data);
+        $arr_datos = Catalogo::get_xid($idcatalogo);
+        $arr_datos = (array)$arr_datos;
+        if($arr_datos['nombre'] == $request->input('itxt_catalogo_nombre') && $arr_datos['descripcion'] == $request->input('itxt_catalogo_descripcion')){
+          $action = "sin cambios";
+          $result = 1;
+        }
+        else{
+          $action = "actualizado";
+          $result = Catalogo::set_update($idcatalogo, $data);
+        }
       }
 
-      // return redirect()->action('CatalogoController@index');
+      $tipo = ($result && $result!=0)?SUCCESS:DANGER;
+      $mensaje = ($result)?"Catálogo ".$action:"Reintente por favor";
+
+      Utilerias::set_flash_message($tipo, $mensaje);
+
       return redirect()->route('catalogo');
     }
   }// save()
 
+  public function delete(Request $request,$idcatalogo){
+    if (!$request->session()->has(DATOSUSUARIO)) {
+      return redirect()->route('login'); // Redirigimos a la ruta con el nombre "login"
+    }else{
+      $result = Catalogo::delete_xid($idcatalogo);
+
+      $tipo = ($result)?SUCCESS:DANGER;
+      $mensaje = ($result)?"Catálogo eliminado":"Reintente por favor";
+      Utilerias::set_flash_message($tipo, $mensaje);
+
+      return redirect()->route('catalogo');
+
+    }
+  }// delete()
 
 
 }// class CatalogoController

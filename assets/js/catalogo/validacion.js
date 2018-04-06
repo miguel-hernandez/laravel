@@ -1,6 +1,6 @@
 $(document).ready(function () {
-  $('#form_catalogo_cu')[0].reset();
-  $("#form_catalogo_cu").validate({
+  $('#form_catalogo_creup')[0].reset();
+  $("#form_catalogo_creup").validate({
           onclick:false, onfocusout: false, onkeypress:false, onkeydown:false, onkeyup:false,
           rules: {
               itxt_catalogo_nombre: {required: true},
@@ -15,5 +15,5 @@ $(document).ready(function () {
 
 $("#btn_catalogo_terminar").click(function(e){
    e.preventDefault();
-   $("#form_catalogo_cu").submit();
+   $("#form_catalogo_creup").submit();
 });
