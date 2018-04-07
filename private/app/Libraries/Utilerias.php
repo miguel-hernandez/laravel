@@ -13,7 +13,7 @@ class Utilerias{
 									 'username' => $usuario_session->username,
 									 'action' => $action
 									);
-	}
+	}// get_array_panelblade()
 
 	public static function limpia_string($string) {
 		$string = trim($string);
@@ -69,12 +69,6 @@ class Utilerias{
 			return strtolower($string);
 		}// limpia_string()
 
-		public static function get_nombremes($mes){
-			 setlocale(LC_TIME, 'spanish');
-			 $nombre = strftime("%B",mktime(0, 0, 0, $mes, 1, 2000));
-			 return strtoupper($nombre);
-		}
-
 		public static function get_offset($post, $valores_xpagina){
           $offset = !isset($post["offset"]) || $post["offset"] == "undefined" ? 0 : $post["offset"];
       		if($offset == 0){
@@ -94,6 +88,12 @@ class Utilerias{
 
 					\Session::flash(FLASH_MESSAGE, $str_html); //<--FLASH MESSAGE
        }// get_flash_message()
+
+			 public static function get_nombremes($mes){
+					setlocale(LC_TIME, 'spanish');
+					$nombre = strftime("%B",mktime(0, 0, 0, $mes, 1, 2000));
+					return strtoupper($nombre);
+			 }
 
 }// class Utilerias
 
