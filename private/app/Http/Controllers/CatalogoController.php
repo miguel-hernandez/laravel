@@ -41,7 +41,7 @@ class CatalogoController extends Controller
     if (!$request->session()->has(DATOSUSUARIO)) {
       return redirect()->route('login');
     }else{
-      $nombre = $request->input('intxt_catalogo_nombre');
+      $nombre = $request->input('itxt_catalogo_nombre');
 
       $offset = Utilerias::get_offset($_POST, VALORES_XPAGINA);
       $num_rows = Catalogo::read($nombre,-1,-1);

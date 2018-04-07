@@ -10,7 +10,7 @@
 <form id="form_catalogo">
 <div class="row mt-0">
     <div class="col-9 col-sm-9 col-md-6 col-lg-6">
-        <input id="intxt_catalogo_nombre" name="intxt_catalogo_nombre" type="text" class="form-control" placeholder="Ingrese el nombre o parte del nombre">
+        <input id="itxt_catalogo_nombre" name="itxt_catalogo_nombre" type="text" class="form-control" placeholder="Ingrese el nombre o parte del nombre">
     </div>
     <div class="col-3 col-sm-3 col-md-2 col-lg-2">
         <button id="btn_catalogo_read" type="button" class="btn btn-primary btn-block" data-toggle="tooltip" data-placement="right" title="buscar"><i class="fa fa-search fa-1x"></i></button>
