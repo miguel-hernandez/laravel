@@ -7,6 +7,14 @@ use Illuminate\Support\Facades\DB;
 class Catalogo extends Model
 {
 
+  public static function read_for_tohers(){
+      return DB::table('catalogo AS c')
+              ->select('c.id as idcatalogo', 'c.catalogo', 'c.descripcion')
+              ->where('estatus', '=', 1)
+              ->orderBy('catalogo', 'asc')
+              ->get();
+  }// read_for_tohers()
+
     public static function read($nombre, $offset,$limit){
       if($offset<0 && $limit<0){
         return DB::table('catalogo')

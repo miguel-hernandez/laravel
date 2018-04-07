@@ -46,17 +46,17 @@ Route::post('catalogo/save', 'CatalogoController@save')
       ->name('catalogo.save');
 Route::get('catalogo/delete/{idcatalogo}', 'CatalogoController@delete')
       ->where(['idcatalogo' => '[0-9]+'])
-      ->name("catalogo.update");
+      ->name("catalogo.delete");
 
 
 Route::get("productos", "ProductoController@index")
-      ->name("producto");
+      ->name("productos");
 Route::post("producto.read", "ProductoController@read")
       ->name("producto.read");
 Route::get('producto/create', 'ProductoController@create')
       ->name('producto.create');
-
-
+Route::post('producto/save', 'ProductoController@save')
+      ->name('producto.save');
 
 
 

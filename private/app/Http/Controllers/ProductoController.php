@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 
+
+use App\Catalogo;
 use App\Producto;
 use App\Libraries\Utilerias;
 class ProductoController extends Controller
@@ -17,14 +19,24 @@ class ProductoController extends Controller
     $this->arr_columnas_grid = array(
        "idproducto"=>array("type"=>"hidden", "header"=>"id"),
        "producto"=>array("type"=>"text", "header"=>"Producto"),
-       "codigo"=>array("type"=>"text", "header"=>"Código")
-
+       "codigo_barras"=>array("type"=>"text", "header"=>"Código"),
+       "precio_provee"=>array("type"=>"text", "header"=>"$ Provedor"),
+       "precio_venta"=>array("type"=>"text", "header"=>"$ Venta"),
+       "inventario_actual"=>array("type"=>"text", "header"=>"Actual"),
+       "inventario_minimo"=>array("type"=>"text", "header"=>"Mínimo"),
+       "idcatalogo"=>array("type"=>"text", "header"=>"Catálogo")
    );
 
    $this->arr_datos = array(
      "idproducto"  => 0,
      "producto"    => "",
-     "codigo" => ""
+     "descripcion" => "",
+     "codigo_barras" => "",
+     "precio_provee" => 0,
+     "precio_venta" => 0,
+     "inventario_actual" => 0,
+     "inventario_minimo" => 0,
+     "idcatalogo" => ""
    );
   }
 
@@ -56,5 +68,31 @@ class ProductoController extends Controller
       return response()->json(["result" => $response]);
     }
   }// read()
+
+  public function create(Request $request){
+    if (!$request->session()->has(DATOSUSUARIO)) {
+      return redirect()->route('login');
+    }else{
+      $action = "Nuevo";
+      $arr_catalogos = (object)[];
+      $arr_catalogos = Catalogo::read_for_tohers();
+
+      return view("producto.creup")->with(Utilerias::get_array_panelblade($request,$this,$action))
+      ->with("datos",$this->arr_datos)
+      ->with("arr_catalogos",$arr_catalogos);
+    }
+  }// create()
+
+  public function save(Request $request){
+    if (!$request->session()->has(DATOSUSUARIO)) {
+      return redirect()->route('login');
+    }else{
+
+
+      echo "<pre>"; print_r($_POST);
+      echo "<pre>"; print_r($_FILES);
+      echo "<a href='".route("producto.create")."'>Regresar al formulario</a>";
+    }
+  }// save()
 
 }// class ProductoController

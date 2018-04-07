@@ -17,7 +17,7 @@ class Producto extends Model
       }
       else{
         return DB::table('producto AS p')
-                ->select('p.id as idproducto', 'p.producto', 'p.codigo_barras')
+                ->select('p.id as idproducto', 'p.producto', 'p.codigo_barras', 'p.precio_provee','p.precio_venta','p.inventario_actual', 'p.inventario_minimo','p.inventario_minimo','p.idcatalogo')
                 ->where('estatus', '=', 1)
                 ->where('producto', 'LIKE', "%".$nombre."%")
                 ->offset($offset)

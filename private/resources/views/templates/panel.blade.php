@@ -32,7 +32,7 @@
               <a href="{{ route('catalogo') }}" class="nav-link"> <i class="fa fa-list"></i> Catálogos </a>
             </li>
             <li class="nav-item">
-              <a href="{{ route('producto') }}" class="nav-link"> <i class="fa fa-reorder"></i> Productos </a>
+              <a href="{{ route('productos') }}" class="nav-link"> <i class="fa fa-reorder"></i> Productos </a>
             </li>
             <li class="nav-item">
               <a href="{{ url('usuarios') }}" class="nav-link"> <i class="fa fa-user-o"></i> Usuarios </a>
