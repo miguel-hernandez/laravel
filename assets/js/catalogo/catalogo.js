@@ -60,7 +60,7 @@ $("#modal_catalogo_btn_cerrar").click(function(e){
 function Catalogo(){
   that_catalogo = this;
   that_catalogo.obj_grid = new Grid("grid_catalogos");
-  that_catalogo.form = "form_catalogo";
+  that_catalogo.form = "form_catalogo"; // El form de búsqueda en el index catálogo
 }
 
 
@@ -93,29 +93,3 @@ Catalogo.prototype.delete = function(idcatalogo) {
   document.body.appendChild(form);
   form.submit();
 };
-/*
-Catalogo.prototype.update = function(idcatalogo) {
-var form = document.createElement("form");
-form.name = "form_catalogo_update";
-form.id = "form_catalogo_update";
-form.method = "POST";
-form.target = "_self";
-form.action = "catalogo/update";
-
-var element1 = document.createElement("input");
-element1.type="hidden";
-element1.value=idcatalogo;
-element1.name="idcatalogo";
-
-var element2 = document.createElement("input");
-element2.type="hidden";
-element2.name="_token";
-element2.value=  $('meta[name="csrf-token"]').attr('content');
-
-form.appendChild(element1);
-form.appendChild(element2);
-document.body.appendChild(form);
-
-form.submit();
-};
-*/

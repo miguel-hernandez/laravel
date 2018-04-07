@@ -9,31 +9,26 @@ use App\Libraries\Utilerias;
 class CatalogoController extends Controller
 {
   public $modulo;
+  private $arr_datos; // va ser object, así lo estamos retornando en el Model para el update;
+  private $arr_columnas_grid;
 
   public function __construct(){
     $this->modulo = "Catálogos";
     $this->arr_columnas_grid = array(
        "idcatalogo"=>array("type"=>"hidden", "header"=>"id"),
        "catalogo"=>array("type"=>"text", "header"=>"Catálogo"),
-       "descripcion"=>array("type"=>"text", "header"=>"Descripción"),
-       "c2"=>array("type"=>"text", "header"=>"Descripción")
+       "descripcion"=>array("type"=>"text", "header"=>"Descripción")
 
    );
-   // $this->arr_datos = (object)array(
-   //   "idcatalogo"  => 0,
-   //   "nombre"    => "",
-   //   "descripcion" => ""
-   // );
-   $this->arr_datos = array(
+   $this->arr_datos = (object)array(
      "idcatalogo"  => 0,
      "nombre"    => "",
      "descripcion" => ""
    );
-  }
+ }// __construct()
 
   public function index(Request $request){
     if (!$request->session()->has(DATOSUSUARIO)) {
-      // return redirect()->action('Auth\LoginController@index');
       return redirect()->route('login'); // Redirigimos a la ruta con el nombre "login"
     }else{
         $action = NULL;
@@ -44,20 +39,15 @@ class CatalogoController extends Controller
 
   public function read(Request $request){
     if (!$request->session()->has(DATOSUSUARIO)) {
-      return redirect()->route('login'); // Redirigimos a la ruta con el nombre "login"
+      return redirect()->route('login');
     }else{
-      // $nombre = $this->input->post('nombre');
-      // $nombre = $request->input('nombre');
-      // $offset = $request->input('offset');
       $nombre = $request->input('intxt_catalogo_nombre');
-      // echo $nombre; die();
+
       $offset = Utilerias::get_offset($_POST, VALORES_XPAGINA);
       $num_rows = Catalogo::read($nombre,-1,-1);
-      // echo $arr_datos; die();
-      // $num_rows = count($arr_datos);
-      // echo "<pre>"; print_r($arr_datos); die();
+
       $result = Catalogo::read($nombre, $offset, VALORES_XPAGINA);
-      // echo "<pre>"; print_r($result); die();
+
       $response = array(
         "num_rows" => $num_rows,
         "arr_datos" => $result,
@@ -80,30 +70,19 @@ class CatalogoController extends Controller
 
   public function update(Request $request,$idcatalogo){
     if (!$request->session()->has(DATOSUSUARIO)) {
-      return redirect()->route('login'); // Redirigimos a la ruta con el nombre "login"
+      return redirect()->route('login');
     }else{
-      // $idcatalogo = $request->input('idcatalogo');
-      // if(!$idcatalogo){
-      //   session_start();
-      //   $idcatalogo = $_SESSION["id_aux"];
-      // }
       $action = "Editar";
       $arr_datos = Catalogo::get_xid($idcatalogo);
-      $arr_datos =  (array) $arr_datos;
-      // echo "<pre>"; print_r($arr_datos['idcatalogo']); die();
       return view("catalogo.creup")->with(Utilerias::get_array_panelblade($request,$this,$action))->with("datos",$arr_datos);
     }
   }// update()
 
   public function save(Request $request){
     if (!$request->session()->has(DATOSUSUARIO)) {
-      return redirect()->route('login'); // Redirigimos a la ruta con el nombre "login"
+      return redirect()->route('login');
     }else{
       $idcatalogo = $request->input('itxt_catalogo_idcatalogo');
-      // session_start();
-      // $_SESSION["id_aux"] = $idcatalogo;
-      // echo "<pre>"; print_r($_SESSION); die();
-      // echo $idcatalogo; die();
       $request->validate(
         [
           'itxt_catalogo_nombre'=> ['required','unique:catalogo,catalogo,'.$idcatalogo]
@@ -147,7 +126,7 @@ class CatalogoController extends Controller
 
   public function delete(Request $request,$idcatalogo){
     if (!$request->session()->has(DATOSUSUARIO)) {
-      return redirect()->route('login'); // Redirigimos a la ruta con el nombre "login"
+      return redirect()->route('login');
     }else{
       $result = Catalogo::delete_xid($idcatalogo);
 
@@ -156,7 +135,6 @@ class CatalogoController extends Controller
       Utilerias::set_flash_message($tipo, $mensaje);
 
       return redirect()->route('catalogo');
-
     }
   }// delete()
 

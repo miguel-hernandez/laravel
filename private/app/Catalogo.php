@@ -17,12 +17,14 @@ class Catalogo extends Model
       }
       else{
         return DB::table('catalogo AS c')
-                ->select('c.id as idcatalogo', 'c.catalogo', 'c.descripcion', 'c.descripcion as c2')
+                ->select('c.id as idcatalogo', 'c.catalogo', 'c.descripcion')
                 ->where('estatus', '=', 1)
                 ->where('catalogo', 'LIKE', "%".$nombre."%")
                 ->offset($offset)
+                ->orderBy('catalogo', 'asc')
                 ->limit($limit)
-                ->get()->toArray();
+                // ->get()->toArray();
+                ->get();
       }
     }// read()
 
@@ -40,35 +42,17 @@ class Catalogo extends Model
 
 
     public static function set_update($idcatalogo,$data){
-      // echo $idcatalogo;
-      // echo "<pre>"; print_r($data);
-       // die();
-
       return DB::table('catalogo')
                 ->where('id', $idcatalogo)
                 ->update($data);
-                
-                // echo "<pre>"; print_r($data); die();
-                // return DB::select( DB::raw("UPDATE catalogo
-                //                             SET catalogo = :catalogo,
-                //                                 descripcion = :descripcion
-                //                              WHERE id = :idcatalogo
-                //                             "
-                //                           ),
-                //                           array( 'catalogo' => $data["catalogo"], 'descripcion'=>$data["descripcion"], 'idcatalogo'=>$idcatalogo )
-                //               );
-
-
-
     }// update()
 
     public static function delete_xid($idcatalogo){
       return DB::table('catalogo')->where('id', '=', $idcatalogo)->delete();
     }// update()
 
-
-
 }// class Catalogo
+
 
 /*
 return DB::table('catalogo')

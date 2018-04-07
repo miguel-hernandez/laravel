@@ -7,8 +7,8 @@ $(document).ready(function () {
               itxt_catalogo_descripcion: {required: true}
           },
           messages: {
-              itxt_catalogo_nombre: {required: " *es requerido"},
-              itxt_catalogo_descripcion: {required: " *es requerido"}
+              itxt_catalogo_nombre: {required: " *El nombre del catálogo es obligatorio"},
+              itxt_catalogo_descripcion: {required: " *La descripción del catálogo es obligatoria"}
           }
       });
 });
