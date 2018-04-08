@@ -5,7 +5,7 @@
   @if (Session::has(FLASH_MESSAGE))
       {!! session(FLASH_MESSAGE) !!}
   @endif
-
+  
 <form id="form_producto">
 <div class="row mt-0">
     <div class="col-9 col-sm-9 col-md-6 col-lg-6">

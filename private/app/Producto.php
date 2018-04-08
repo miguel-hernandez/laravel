@@ -27,4 +27,7 @@ class Producto extends Model
       }
     }// read()
 
+    public static function create($data){
+      return DB::table('producto')->insert($data);
+    }// create()
 }// class Producto

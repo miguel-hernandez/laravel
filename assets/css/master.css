@@ -25,7 +25,9 @@ footer p {
 textarea{
 	resize: none;
 }
-
+label{
+	font-weight:bold;
+}
 /* --------------------------------------------------------------- ESTILO PARA EL LOADER DENTRO DEL SWWET ALERT 2 */
 
 .loader {
