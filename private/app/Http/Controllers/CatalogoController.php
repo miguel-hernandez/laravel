@@ -14,12 +14,13 @@ class CatalogoController extends Controller
 
   public function __construct(){
     $this->modulo = "Catálogos";
-    $this->arr_columnas_grid = array(
-       "idcatalogo"=>array("type"=>"hidden", "header"=>"id"),
-       "catalogo"=>array("type"=>"text", "header"=>"Catálogo"),
-       "descripcion"=>array("type"=>"text", "header"=>"Descripción")
 
+    $this->arr_columnas_grid = array(
+       "idcatalogo"=>array("type"=>"hidden", "header"=>"id", "width"=>"0%"),
+       "catalogo"=>array("type"=>"text", "header"=>"Catálogo", "width"=>"30%"),
+       "descripcion"=>array("type"=>"text", "header"=>"Descripción", "width"=>"70%")
    );
+
    $this->arr_datos = (object)array(
      "idcatalogo"  => 0,
      "nombre"    => "",

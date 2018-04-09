@@ -46,14 +46,14 @@ Grid.prototype.get_thead = function(callback) {
   var html_thead = "";
   html_thead += "<div class='table-responsive'>";
   html_thead += "<table class='table table-condensed table-hover table-bordered'>";
-  // html_thead += "<table class='table  table-hover  table-sm'>";
   html_thead += "<thead>";
   html_thead += "<tr class="+_thisgrid.theme+">";
   var objeto_columnas = _thisgrid.columns;
   for (var item in objeto_columnas) {
-      // console.info(item);
       var tipo = objeto_columnas[item]["type"];
       var label = objeto_columnas[item]["header"];
+      var width = ( typeof objeto_columnas[item]["width"] != 'undefined' )?objeto_columnas[item]["width"]:"auto";
+
       switch (tipo) {
         case "hidden":
           html_thead += "<th id='"+item+"' hidden>";
@@ -61,7 +61,7 @@ Grid.prototype.get_thead = function(callback) {
           html_thead += "</th>";
         break;
         case "text":
-          html_thead += "<th id='"+item+"'>";
+          html_thead += "<th id='"+item+"' style='width:"+width+"'>";
           html_thead += label;
           html_thead += "</th>";
         break;
