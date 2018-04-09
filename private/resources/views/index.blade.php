@@ -1,56 +1,3 @@
-<style>
-    html, body {
-        background-color: #fff;
-        color: #636b6f;
-        font-family: 'Raleway', sans-serif;
-        font-weight: 100;
-        height: 100vh;
-        margin: 0;
-    }
-
-    .full-height {
-        height: 100vh;
-    }
-
-    .flex-center {
-        align-items: center;
-        display: flex;
-        justify-content: center;
-    }
-
-    .position-ref {
-        position: relative;
-    }
-
-    .top-right {
-        position: absolute;
-        right: 10px;
-        top: 18px;
-    }
-
-    .content {
-        text-align: center;
-    }
-
-    .title {
-        font-size: 84px;
-    }
-
-    .links > a {
-        color: #636b6f;
-        padding: 0 25px;
-        font-size: 12px;
-        font-weight: 600;
-        letter-spacing: .1rem;
-        text-decoration: none;
-        text-transform: uppercase;
-    }
-
-    .m-b-md {
-        margin-bottom: 30px;
-    }
-</style>
-
 @extends('templates/layout')
 
 @section('titulo')
@@ -58,17 +5,45 @@
 @endsection
 
 @section('content')
-  <div class="container-fluid">
-    <div class="content">
-      <div class="title m-b-md">
-          Bienvenido
-      </div>
-      <div class="links">
-        <a href="{{ url('login') }}">Login</a>
+  <div class="container">
+    <div class="row">
+    <div class="col-md-12">
+      <center> <a href="{{ url('login') }}">Login</a> </center>
+    </div>
+  </div>
+
+    <div class="row">
+      <!-- [idproducto] => 1
+      [producto] => producto1
+      [codigo_barras] => p1
+      [precio_provee] => 0.00
+      [precio_venta] => 0.00
+      [inventario_actual] => 0
+      [inventario_minimo] => 0
+      [idcatalogo] => 21
+      [imgurl] => assets/imagenes/productos/aa/issue_0586_ok.PNG
+      [catalogo] => aa -->
+    @forelse ($arr_productos as $producto)
+    <div class="col-md-4 mt-2">
+      <div class="card box-shadow">
+        <img class="card-img-top" src="{{ asset($producto->imgurl) }} " class="img-fluid"  alt="Responsive image Card image cap">
+        <div class="card-body">
+          <p class="card-text">
+            {{ $producto->producto }}
+          </p>
+          <div class="d-flex justify-content-between align-items-center">
+            <div class="btn-group">
+              <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+              <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+            </div>
+            <small class="text-muted">9 mins</small>
+          </div>
+        </div>
       </div>
     </div>
-
-
-
+    @empty
+        <label>No hay productos registrados</label>
+    @endforelse
   </div>
+</div><!-- container-fluid -->
 @endsection

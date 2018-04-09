@@ -28,14 +28,16 @@ class ProductoController extends Controller
 		);
 
     $this->arr_columnas_grid = array(
-       "idproducto"=>array("type"=>"hidden", "header"=>"id"),
-       "producto"=>array("type"=>"text", "header"=>"Producto"),
-       "codigo_barras"=>array("type"=>"text", "header"=>"Código"),
-       "precio_provee"=>array("type"=>"text", "header"=>"$ Provedor"),
-       "precio_venta"=>array("type"=>"text", "header"=>"$ Venta"),
-       "inventario_actual"=>array("type"=>"text", "header"=>"Actual"),
-       "inventario_minimo"=>array("type"=>"text", "header"=>"Mínimo"),
-       "idcatalogo"=>array("type"=>"text", "header"=>"Catálogo")
+       "idproducto"=>array("type"=>"hidden", "header"=>"id", "width"=>"0%"),
+       "producto"=>array("type"=>"text", "header"=>"Producto", "width"=>"40%"),
+       "codigo_barras"=>array("type"=>"text", "header"=>"Código", "width"=>"10%"),
+       "precio_provee"=>array("type"=>"text", "header"=>"$ Provedor", "width"=>"10%"),
+       "precio_venta"=>array("type"=>"text", "header"=>"$ Venta", "width"=>"10%"),
+       "inventario_actual"=>array("type"=>"text", "header"=>"Actual", "width"=>"10%"),
+       "inventario_minimo"=>array("type"=>"text", "header"=>"Mínimo", "width"=>"10%"),
+       // "idcatalogo"=>array("type"=>"text", "header"=>"Catálogo", "width"=>"10%")
+       "catalogo"=>array("type"=>"text", "header"=>"Catálogo", "width"=>"10%")
+
    );
 
    $this->arr_datos = array(
@@ -117,12 +119,52 @@ class ProductoController extends Controller
 
     if($idproducto==0){
       $action = "creado";
-      $result = Producto::create($data);
+
+      // Preparar el nombre del carpeta según el catálogo al que pertenece
+      $idcatalogo = $request->input('itxt_producto_idcatalogo');
+      $arr_catalogo = Catalogo::get_xid($idcatalogo);
+      $catalogo = $arr_catalogo->nombre;
+      $micadena = Utilerias::limpia_string($catalogo);
+      $micadena = strtolower($micadena);
+      $micadena = str_replace(" ","_",$micadena);
+
+      // La URL principal concat la del catálogo
+      $url_principal =  'assets/imagenes/productos/';
+      $dir_subida = $url_principal.$micadena."/";
+
+      // echo $dir_subida; die();
+      if (file_exists($dir_subida)) {
+          // echo "existe";  die();
+            // $dir_subida = "imagenes/".$micadena."/";
+            $fichero_subido = $dir_subida.$_FILES['ifile_producto_img']['name'];
+            if (move_uploaded_file($_FILES['ifile_producto_img']['tmp_name'], $fichero_subido)) {
+                // echo "El fichero es válido y se subió con éxito.\n";
+            } else {
+                echo "¡Posible ataque de subida de ficheros!\n";
+            }
+      } else {
+          // echo " no existe"; die();
+          if(mkdir($dir_subida, 0777, true)) {
+            // $fichero_subido = $dir_subida . basename($_FILES['ifile_producto_img']['name']);
+            // $dir_subida = "imagenes/".$micadena."/";
+            $fichero_subido = $dir_subida.$_FILES['ifile_producto_img']['name'];
+            if (move_uploaded_file($_FILES['ifile_producto_img']['tmp_name'], $fichero_subido)) {
+                // echo "El fichero es válido y se subió con éxito.\n";
+            } else {
+                echo "¡Posible ataque de subida de ficheros!\n";
+            }
+          }
+      }
+      // echo $fichero_subido; die();
+      $path = $fichero_subido;
+
+      $result = Producto::create($data, $path);
     }else{
       echo "update"; die();
     }
+
     $tipo = ($result && $result!=0)?SUCCESS:DANGER;
-    $mensaje = ($result)?" Producto {$result} ".$action:"Reintente por favor";
+    $mensaje = ($result)?" Producto ".$action:"Reintente por favor";
     Utilerias::set_flash_message($tipo, $mensaje);
     return redirect()->route('productos');
       // $action = ($idproducto==0)?"create":"update";

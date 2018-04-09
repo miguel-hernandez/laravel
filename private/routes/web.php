@@ -10,7 +10,7 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+/*
 Route::get('/', function () {
   return view('index', [
     'titulo' => 'Página principal',
@@ -18,7 +18,10 @@ Route::get('/', function () {
   ]
 );
 });
+*/
 
+Route::get('/', 'IndexController@index')
+      ->name('index');
 
 // Route para redireccionar al usuario si no tiene sesión
 Route::get('login', 'Auth\LoginController@index')
