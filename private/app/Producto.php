@@ -28,6 +28,15 @@ class Producto extends Model
     }// read()
 
     public static function create($data){
-      return DB::table('producto')->insert($data);
+      DB::table('producto')->insert($data);
+      return DB::getPdo()->lastInsertId();;
+      // ->lastInsertId();
+      /*
+      DB::transaction(function () {
+          DB::table('users')->update(['votes' => 1]);
+
+          DB::table('posts')->delete();
+      });
+      */
     }// create()
 }// class Producto

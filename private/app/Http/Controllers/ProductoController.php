@@ -122,7 +122,7 @@ class ProductoController extends Controller
       echo "update"; die();
     }
     $tipo = ($result && $result!=0)?SUCCESS:DANGER;
-    $mensaje = ($result)?"Producto ".$action:"Reintente por favor";
+    $mensaje = ($result)?" Producto {$result} ".$action:"Reintente por favor";
     Utilerias::set_flash_message($tipo, $mensaje);
     return redirect()->route('productos');
       // $action = ($idproducto==0)?"create":"update";
