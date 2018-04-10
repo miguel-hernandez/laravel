@@ -9,6 +9,8 @@ function get_gridpaginador(offset){
   obj_producto.read(offset);
 }
 
+
+
 $("#btn_producto_update").click(function(e){
   e.preventDefault();
   var arr_row = that_producto.obj_grid.get_row_selected();

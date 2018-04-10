@@ -40,7 +40,7 @@ class ProductoController extends Controller
 
    );
 
-   $this->arr_datos = array(
+   $this->arr_datos = (object)array(
      "idproducto"  => 0,
      "producto"    => "",
      "descripcion" => "",
@@ -96,6 +96,20 @@ class ProductoController extends Controller
     }
   }// create()
 
+  public function update(Request $request,$idproducto){
+    if (!$request->session()->has(DATOSUSUARIO)) {
+      return redirect()->route('login');
+    }else{
+      $action = "Editar";
+      $arr_datos = Producto::get_xid($idproducto);
+      $arr_catalogos = Catalogo::read_for_tohers();
+      // echo "<pre>"; print_r($arr_datos); die();
+      return view("producto.creup")->with(Utilerias::get_array_panelblade($request,$this,$action))
+                                  ->with("datos",$arr_datos)
+                                  ->with("arr_catalogos",$arr_catalogos);
+    }
+  }// update()
+
 
   public function save(Request $request){
     if (!$request->session()->has(DATOSUSUARIO)) {
@@ -119,70 +133,48 @@ class ProductoController extends Controller
 
     if($idproducto==0){
       $action = "creado";
-
-      // Preparar el nombre del carpeta según el catálogo al que pertenece
-      $idcatalogo = $request->input('itxt_producto_idcatalogo');
-      $arr_catalogo = Catalogo::get_xid($idcatalogo);
-      $catalogo = $arr_catalogo->nombre;
-      $micadena = Utilerias::limpia_string($catalogo);
-      $micadena = strtolower($micadena);
-      $micadena = str_replace(" ","_",$micadena);
-
-      // La URL principal concat la del catálogo
-      $url_principal =  'assets/imagenes/productos/';
-      $dir_subida = $url_principal.$micadena."/";
-
-      // echo $dir_subida; die();
-      if (file_exists($dir_subida)) {
-          // echo "existe";  die();
-            // $dir_subida = "imagenes/".$micadena."/";
-            $fichero_subido = $dir_subida.$_FILES['ifile_producto_img']['name'];
-            if (move_uploaded_file($_FILES['ifile_producto_img']['tmp_name'], $fichero_subido)) {
-                // echo "El fichero es válido y se subió con éxito.\n";
-            } else {
-                echo "¡Posible ataque de subida de ficheros!\n";
-            }
-      } else {
-          // echo " no existe"; die();
-          if(mkdir($dir_subida, 0777, true)) {
-            // $fichero_subido = $dir_subida . basename($_FILES['ifile_producto_img']['name']);
-            // $dir_subida = "imagenes/".$micadena."/";
-            $fichero_subido = $dir_subida.$_FILES['ifile_producto_img']['name'];
-            if (move_uploaded_file($_FILES['ifile_producto_img']['tmp_name'], $fichero_subido)) {
-                // echo "El fichero es válido y se subió con éxito.\n";
-            } else {
-                echo "¡Posible ataque de subida de ficheros!\n";
-            }
-          }
-      }
-      // echo $fichero_subido; die();
-      $path = $fichero_subido;
-
+      $path = $this->upload_file($_FILES, $request);
       $result = Producto::create($data, $path);
     }else{
-      echo "update"; die();
+      $action = "actualizado";
+      $path = "";
+      $img_aux = $request->input('ifile_producto_img_aux');
+      if($img_aux>0){ // si cambió imagen
+        $this->request_validate_img($request);
+        $path = $this->upload_file($_FILES, $request);
+      }
+
+      $result = Producto::set_update($idproducto, $data, $path);
+
+      // echo "update";
+      // echo "<a href='".route("productos")."'>Regresar</a>";
+      // die();
     }
 
-    $tipo = ($result && $result!=0)?SUCCESS:DANGER;
-    $mensaje = ($result)?" Producto ".$action:"Reintente por favor";
-    Utilerias::set_flash_message($tipo, $mensaje);
-    return redirect()->route('productos');
+      $tipo = ($result && $result!=0)?SUCCESS:DANGER;
+      $mensaje = ($result)?" Producto ".$action:"Reintente por favor";
+      Utilerias::set_flash_message($tipo, $mensaje);
+      return redirect()->route('productos');
       // $action = ($idproducto==0)?"create":"update";
       // $this->upload_file($_FILES,$action);
 
       // echo "<pre>"; print_r($_POST);
       // echo "<pre>"; print_r($_FILES);
 
-      echo "<a href='".route("producto.create")."'>Regresar al formulario</a>";
+      // echo "<a href='".route("producto.create")."'>Regresar al formulario</a>";
     }
   }// save()
 
   private function request_validate($request){
+      $idproducto = $request->input('itxt_producto_idproducto');
+      $codigo_barras = $request->input('itxt_producto_codigo_barras');
       $request->validate(
         [
-          'ifile_producto_img'=> ['required','image' => 'mimes:jpeg,png', 'max:2048'], // 2MB
-          'itxt_producto_producto'=> ['required'],
-          'itxt_producto_codigo_barras'=> ['required'],
+          'ifile_producto_img'=> ($idproducto==0)?['required','image' => 'mimes:jpeg,png', 'max:2048']:[], // 2MB
+          // 'itxt_producto_producto'=> ['required'],
+          'itxt_producto_producto'=> ['required','unique:producto,producto,'.$idproducto], // unique:tabla,campo
+          // 'itxt_producto_codigo_barras'=> ['required'],
+          'itxt_producto_codigo_barras'=> ['required','unique:producto,codigo_barras,'.$idproducto],
           'itxt_producto_idcatalogo'=> ['required'],
           'itxt_producto_descripcion'=> ['required'],
           'itxt_producto_precio_provee'=> ['numeric','min:0'],
@@ -195,7 +187,9 @@ class ProductoController extends Controller
          'ifile_producto_img.mimes'=>'Su archivo no cumple con el formato jpeg o png',
          'ifile_producto_img.max'=>'El tamaño máximo permitido son 2 MB',
          'itxt_producto_producto.required'=>'Ingrese un nombre para el producto',
+         'itxt_producto_producto.unique'=>'Ya existe un producto con el nombre ingresado',
          'itxt_producto_codigo_barras.required'=>'Ingrese un código de barras',
+         'itxt_producto_codigo_barras.unique'=>'Ya existe un producto con el código de barras ingresado',
          'itxt_producto_idcatalogo.required'=>'Seleccione un catálogo',
          'itxt_producto_descripcion.required'=>'Ingrese una descripción',
          'itxt_producto_precio_provee.numeric'=>'Ingrese un número',
@@ -210,11 +204,106 @@ class ProductoController extends Controller
       );
   }// request_validate()
 
-  private function upload_file($file, $action){
+  private function request_validate_img($request){
+    $request->validate(
+      [
+        'ifile_producto_img'=> ['required','image' => 'mimes:jpeg,png', 'max:2048'] // 2MB
+      ],
+      [
+       'ifile_producto_img.required'=>'Seleccione una imagen para el producto',
+       'ifile_producto_img.mimes'=>'Su archivo no cumple con el formato jpeg o png',
+       'ifile_producto_img.max'=>'El tamaño máximo permitido son 2 MB'
+     ]
+    );
+  }// request_validate()
+
+  private function upload_file($file, $request){
+    // Preparar el nombre del carpeta según el catálogo al que pertenece
+    $idcatalogo = $request->input('itxt_producto_idcatalogo');
+    $arr_catalogo = Catalogo::get_xid($idcatalogo);
+    $catalogo = $arr_catalogo->nombre;
+    $micadena = Utilerias::limpia_string($catalogo);
+    $micadena = strtolower($micadena);
+    $micadena = str_replace(" ","_",$micadena);
+
+    // La URL principal concat la del catálogo
+    $url_principal =  'assets/imagenes/productos/';
+    $dir_subida = $url_principal.$micadena."/";
+
+    // echo $dir_subida; die();
+    if (file_exists($dir_subida)) {
+        // echo "existe";  die();
+          // $dir_subida = "imagenes/".$micadena."/";
+          $fichero_subido = $dir_subida.$file['ifile_producto_img']['name'];
+          if (move_uploaded_file($file['ifile_producto_img']['tmp_name'], $fichero_subido)) {
+              // echo "El fichero es válido y se subió con éxito.\n";
+          } else {
+              echo "¡Posible ataque de subida de ficheros!\n";
+          }
+    } else {
+        // echo " no existe"; die();
+        if(mkdir($dir_subida, 0777, true)) {
+          // $fichero_subido = $dir_subida . basename($_FILES['ifile_producto_img']['name']);
+          // $dir_subida = "imagenes/".$micadena."/";
+          $fichero_subido = $dir_subida.$file['ifile_producto_img']['name'];
+          if (move_uploaded_file($file['ifile_producto_img']['tmp_name'], $fichero_subido)) {
+              // echo "El fichero es válido y se subió con éxito.\n";
+          } else {
+              echo "¡Posible ataque de subida de ficheros!\n";
+          }
+        }
+    }
+    return $fichero_subido;
+    // echo $fichero_subido; die();
+    // $path = $fichero_subido;
     // echo "upload_file()";
     // echo "<pre>"; print_r($file);
     // ifile_producto_img
     // die();
 
-  }
+  }// upload_file()
+
 }// class ProductoController
+
+
+/*
+*
+// Preparar el nombre del carpeta según el catálogo al que pertenece
+$idcatalogo = $request->input('itxt_producto_idcatalogo');
+$arr_catalogo = Catalogo::get_xid($idcatalogo);
+$catalogo = $arr_catalogo->nombre;
+$micadena = Utilerias::limpia_string($catalogo);
+$micadena = strtolower($micadena);
+$micadena = str_replace(" ","_",$micadena);
+
+// La URL principal concat la del catálogo
+$url_principal =  'assets/imagenes/productos/';
+$dir_subida = $url_principal.$micadena."/";
+
+// echo $dir_subida; die();
+if (file_exists($dir_subida)) {
+    // echo "existe";  die();
+      // $dir_subida = "imagenes/".$micadena."/";
+      $fichero_subido = $dir_subida.$_FILES['ifile_producto_img']['name'];
+      if (move_uploaded_file($_FILES['ifile_producto_img']['tmp_name'], $fichero_subido)) {
+          // echo "El fichero es válido y se subió con éxito.\n";
+      } else {
+          echo "¡Posible ataque de subida de ficheros!\n";
+      }
+} else {
+    // echo " no existe"; die();
+    if(mkdir($dir_subida, 0777, true)) {
+      // $fichero_subido = $dir_subida . basename($_FILES['ifile_producto_img']['name']);
+      // $dir_subida = "imagenes/".$micadena."/";
+      $fichero_subido = $dir_subida.$_FILES['ifile_producto_img']['name'];
+      if (move_uploaded_file($_FILES['ifile_producto_img']['tmp_name'], $fichero_subido)) {
+          // echo "El fichero es válido y se subió con éxito.\n";
+      } else {
+          echo "¡Posible ataque de subida de ficheros!\n";
+      }
+    }
+}
+// echo $fichero_subido; die();
+$path = $fichero_subido;
+*
+*/

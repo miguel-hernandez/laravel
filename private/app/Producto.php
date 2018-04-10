@@ -38,6 +38,15 @@ class Producto extends Model
       }
     }// read()
 
+    public static function get_xid($idproducto){
+      return DB::table('producto AS p')
+              ->join('catalogo AS c', 'c.id', '=', 'p.idcatalogo')
+              ->select('p.id as idproducto', 'p.producto','p.descripcion', 'p.codigo_barras', 'p.precio_provee','p.precio_venta','p.inventario_actual', 'p.inventario_minimo','p.inventario_minimo','p.idcatalogo', 'c.catalogo')
+              ->where('p.estatus', '=', 1)
+              ->where('p.id', '=', $idproducto)
+              ->first();
+    }// get_xid()
+
     public static function create($data, $img){
       /*
       DB::table('producto')->insert($data);
@@ -75,4 +84,34 @@ class Producto extends Model
       });
       */
     }// create()
+
+    public static function set_update($idproducto,$data, $imgurl){
+      DB::beginTransaction();
+
+      try {
+        DB::table('producto')
+                  ->where('id', $idproducto)
+                  ->update($data);
+
+
+          if($imgurl != ""){
+              DB::table('imagenes_xproducto')->where('idproducto', '=', $idproducto)->delete();
+              $data_img = [
+                "idproducto"=>$idproducto,
+                "imgurl"=>$imgurl
+              ];
+              DB::table('imagenes_xproducto')->insert($data_img);
+          }
+
+          DB::commit();
+
+          return TRUE;// all good
+
+      } catch (\Exception $e) {
+          DB::rollback();
+
+          return FALSE;// something went wrong
+      }
+    }// update()
+
 }// class Producto

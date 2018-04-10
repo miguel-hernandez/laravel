@@ -17,3 +17,9 @@ $("#btn_catalogo_terminar").click(function(e){
    e.preventDefault();
    $("#form_producto_creup").submit();
 });
+
+$('#ifile_producto_img').on("change", function(){
+  $("#ifile_producto_img_aux").val(this.files.length);
+  // console.info(this.files.length);
+  // uploadFile();
+});

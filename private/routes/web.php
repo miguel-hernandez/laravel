@@ -58,6 +58,9 @@ Route::post("producto.read", "ProductoController@read")
       ->name("producto.read");
 Route::get('producto/create', 'ProductoController@create')
       ->name('producto.create');
+Route::get('producto/update/{idproducto}', 'ProductoController@update')
+      ->where(['idproducto' => '[0-9]+'])
+      ->name("producto.update");
 Route::post('producto/save', 'ProductoController@save')
       ->name('producto.save');
 
